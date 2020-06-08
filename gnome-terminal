@@ -5,7 +5,7 @@ if [ -e ~/scripts-data/auto-dark/sun_times ]; then
   sunset=`tail -n1 ~/scripts-data/auto-dark/sun_times`
 fi
 
-currenttime=$(date +%H:%M)
+currenttime=$(date -u +%H:%M:%S)
 if [[ "$sunrise" != "" ]] && [[ "$sunset" != "" ]] && ( [[ "$currenttime" < "$sunrise" ]] || [[ "$currenttime" > "$sunset" ]] ); then
   /usr/bin/gnome-terminal --window-with-profile=Dark $@
 else

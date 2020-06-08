@@ -2,7 +2,12 @@
 
 set -e
 
-sleep 5 # żeby się podłączył do sieci
-location=52.25,21.00 # Warszawa
-curl -f -L https://weather.com/pl-PL/pogoda/dzisiaj/l/$location | sed 's/<span/\n/g' | sed 's/<\/span>/\n/g'  | grep -E "details-sunrise|details-sunset" | sed -e 's/.*>//g' > ~/scripts-data/auto-dark/sun_times_curr
+#sleep 5 # żeby się podłączył do sieci
+# Warszawa
+lat=52.25
+lng=21.00
+
+curl "https://api.sunrise-sunset.org/json?lat=$lat&lng=$lng&formatted=0" > ~/scripts-data/auto-dark/sun_times.json
+cat ~/scripts-data/auto-dark/sun_times.json | jq -r .results.sunrise | sed -e 's/.*T//' -e 's/+00:00//' > ~/scripts-data/auto-dark/sun_times_curr
+cat ~/scripts-data/auto-dark/sun_times.json | jq -r .results.sunset  | sed -e 's/.*T//' -e 's/+00:00//' >> ~/scripts-data/auto-dark/sun_times_curr
 cp ~/scripts-data/auto-dark/sun_times_curr ~/scripts-data/auto-dark/sun_times
